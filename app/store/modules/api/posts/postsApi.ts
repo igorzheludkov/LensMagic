@@ -2,7 +2,7 @@ import { FetchBaseQueryError } from '@reduxjs/toolkit/query/react'
 import apiSlice from '../apiSlice'
 
 import { AuthState } from '../../auth/slice'
-import { IPost } from 'app/types/IPost'
+import { IComment, IPost } from 'app/types/IPost'
 import fetchLocalPhoto from 'app/utils/fetchLocalPhoto'
 import { getDownloadURL, ref, uploadBytes, uploadBytesResumable } from 'firebase/storage'
 import { db, storage } from 'app/constants/firebaseConfig'
@@ -92,9 +92,15 @@ export const postsApi = apiSlice.injectEndpoints({
     addPostComment: builder.mutation({
       invalidatesTags: ['post'],
       queryFn: async (data: ICommentAddReq, thunkAPI) => {
+        const { auth } = thunkAPI.getState() as RootState
+        if (!auth?.user) return { error: { data: 'user unauthorised', status: 401 } }
         try {
+          const comment: IComment = {
+            ...data.comment,
+            authorID: auth.user.uid
+          }
           await updateDoc(doc(db, collectionName, data.postId), {
-            comments: arrayUnion({ ...data.comment })
+            comments: arrayUnion({ ...comment })
           })
           return { data: true }
         } catch (error: any) {

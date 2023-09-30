@@ -13,7 +13,7 @@ const Tab = createBottomTabNavigator<TBottomTabsNav>()
 
 export default function BottomTabsNavigator() {
   const dispatch = useAppDispatch()
-  const { isAuthorized } = useAppSelector((state) => state.auth)
+  const { isAuthorized, user } = useAppSelector((state) => state.auth)
 
   return (
     <>
@@ -39,7 +39,7 @@ export default function BottomTabsNavigator() {
             headerRight: isAuthorized
               ? () => (
                   <Button mode='contained' onPress={() => dispatch(logout())}>
-                    Logout
+                    {user?.email} - Logout
                   </Button>
                 )
               : () => <View />

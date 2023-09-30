@@ -9,7 +9,6 @@ export interface IPost {
 }
 
 export interface IComment {
-  id: string
   authorID: string
   createdAt: string
   message: string
