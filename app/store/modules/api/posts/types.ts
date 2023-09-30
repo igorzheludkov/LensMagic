@@ -1,15 +1,11 @@
+import { IComment, IPost } from 'app/types/IPost'
 
-// export interface IError {
-//   data: string
-//   status: number
-// }
+export interface ICommentAddReq {
+  postId: string
+  comment: IComment
+}
 
-// export interface IBookmarkQuery {
-//   data?: IProfileForm
-//   subCollection: 'services' | 'goods'
-// }
-
-// export interface IRemoveBookmark {
-//   id: string
-//   subCollection: 'services' | 'goods'
-// }
+export interface IPostRes {
+  post: IPost
+  postId: string
+}

@@ -7,8 +7,18 @@ import fetchLocalPhoto from 'app/utils/fetchLocalPhoto'
 import { getDownloadURL, ref, uploadBytes, uploadBytesResumable } from 'firebase/storage'
 import { db, storage } from 'app/constants/firebaseConfig'
 import getFilename from 'app/utils/getFilename'
-import { addDoc, collection, getDocs } from 'firebase/firestore'
+import {
+  addDoc,
+  collection,
+  getDocs,
+  updateDoc,
+  arrayUnion,
+  doc,
+  increment,
+  getDoc
+} from 'firebase/firestore'
 import { RootState } from 'app/store/store'
+import { ICommentAddReq, IPostRes } from 'app/store/modules/api/posts/types'
 
 // import { IBookmarkQuery, IRemoveBookmark } from './types'
 
@@ -18,17 +28,32 @@ const storageName = 'posts-photos'
 export const postsApi = apiSlice.injectEndpoints({
   overrideExisting: true,
   endpoints: (builder) => ({
-    getPosts: builder.query<IPost[], null>({
+    getPosts: builder.query<IPostRes[], null>({
       providesTags: ['posts'],
       queryFn: async (_: null, thunkAPI) => {
         const querySnapshot = await getDocs(collection(db, collectionName))
-        const postsList: IPost[] = []
+        const postsList: IPostRes[] = []
 
         try {
           querySnapshot.forEach((doc) => {
-            postsList.push(doc.data() as IPost)
+            postsList.push({ postId: doc.id, post: doc.data() as IPost })
           })
           return { data: postsList }
+        } catch (error: any) {
+          return { error: { data: error.message, status: 400 } }
+        }
+      }
+    }),
+    getSinglePost: builder.query<IPost, string>({
+      providesTags: ['post'],
+      queryFn: async (id: string, thunkAPI) => {
+        const docRef = doc(db, collectionName, id)
+        const docSnap = await getDoc(docRef)
+        let post: IPost
+
+        try {
+          post = docSnap.data() as IPost
+          return { data: post }
         } catch (error: any) {
           return { error: { data: error.message, status: 400 } }
         }
@@ -63,10 +88,42 @@ export const postsApi = apiSlice.injectEndpoints({
           return { error: { data: error.message, status: 400 } }
         }
       }
+    }),
+    addPostComment: builder.mutation({
+      invalidatesTags: ['post'],
+      queryFn: async (data: ICommentAddReq, thunkAPI) => {
+        try {
+          await updateDoc(doc(db, collectionName, data.postId), {
+            comments: arrayUnion({ ...data.comment })
+          })
+          return { data: true }
+        } catch (error: any) {
+          return { error: { data: error.message, status: 400 } }
+        }
+      }
+    }),
+    addPostLike: builder.mutation({
+      invalidatesTags: ['post'],
+      queryFn: async (data: ICommentAddReq, thunkAPI) => {
+        try {
+          await updateDoc(doc(db, collectionName, data.postId), {
+            likes: increment(1)
+          })
+          return { data: true }
+        } catch (error: any) {
+          return { error: { data: error.message, status: 400 } }
+        }
+      }
     })
   })
 })
 
 export default postsApi
 
-export const { useAddPostMutation, useGetPostsQuery } = postsApi
+export const {
+  useAddPostMutation,
+  useGetPostsQuery,
+  useGetSinglePostQuery,
+  useAddPostCommentMutation,
+  useAddPostLikeMutation
+} = postsApi

@@ -4,7 +4,7 @@ export const apiSlice = createApi({
   reducerPath: 'apiSlice',
   baseQuery: fetchBaseQuery({ baseUrl: 'fake' }),
   endpoints: () => ({}),
-  tagTypes: ['posts'],
+  tagTypes: ['posts', 'post'],
 })
 
 export default apiSlice

@@ -10,6 +10,7 @@ import BottomTabsNavigator from 'app/screens/BottomTabs/BottomTabsNavigator'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useAppDispatch } from 'app/store/hooks'
 import { authActions } from 'app/store/modules/auth/slice'
+import SinglePostScreen from 'app/screens/SinglePostScreen'
 
 const Stack = createNativeStackNavigator<TRootStack>()
 
@@ -40,6 +41,13 @@ export default function RootNavigation() {
           <Stack.Screen
             name='CreatePostScreen'
             component={CreatePostScreen}
+            options={{
+              headerShown: true
+            }}
+          />
+          <Stack.Screen
+            name='SinglePostScreen'
+            component={SinglePostScreen}
             options={{
               headerShown: true
             }}

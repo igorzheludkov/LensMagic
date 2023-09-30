@@ -3,6 +3,7 @@ export type TRootStack = {
   CreatePostScreen: undefined
   LoginScreen: undefined
   RegistrationScreen: undefined
+  SinglePostScreen: { postId: string }
 }
 
 export type TAuthStack = {

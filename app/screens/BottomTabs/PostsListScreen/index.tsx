@@ -18,7 +18,7 @@ export default function PostsListScreen() {
     <View style={s.wrapper}>
       <FlatList
         data={posts.data}
-        renderItem={({ item }) => <PostsCard post={item} />}
+        renderItem={({ item }) => <PostsCard data={item} />}
         contentContainerStyle={s.contentContainer}
       />
       {isAuthorized && <FAB icon='plus' style={s.fab} onPress={() => navigate('CreatePostScreen')} />}
