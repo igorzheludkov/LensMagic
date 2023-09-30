@@ -1,31 +1,51 @@
-import React from 'react'
-import { RootStack } from 'app/types/INavigation'
+import React, { useEffect } from 'react'
+import { TRootStack } from 'app/types/INavigation'
+import { onAuthStateChanged } from 'firebase/auth'
+import { auth } from 'app/constants/firebaseConfig'
 
-import { SafeAreaView } from 'react-native'
+import { SafeAreaView, StatusBar } from 'react-native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import CreatePostScreen from 'app/navigation/HomeStack/CreatePostScreen'
-import BottomTabsNavigator from 'app/navigation/HomeStack/BottomTabs/BottomTabsNavigator'
+import CreatePostScreen from 'app/screens/CreatePostScreen'
+import BottomTabsNavigator from 'app/screens/BottomTabs/BottomTabsNavigator'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { useAppDispatch } from 'app/store/hooks'
+import { authActions } from 'app/store/modules/auth/slice'
 
-const Stack = createNativeStackNavigator<RootStack>()
+const Stack = createNativeStackNavigator<TRootStack>()
 
 export default function RootNavigation() {
+  const insets = useSafeAreaInsets()
+  const dispatch = useAppDispatch()
+
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        dispatch(authActions.updateUserState(user))
+      } else {
+        console.log('~~~~~~~~~~~~~~ loggedOut')
+      }
+    })
+  }, [])
+
   return (
     <>
-      <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName='BottomTabsNavigator'>
-        <Stack.Screen
-          name='BottomTabsNavigator'
-          component={BottomTabsNavigator}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name='CreatePostScreen'
-          component={CreatePostScreen}
-          options={{
-            headerShown: false
-          }}
-        />
-      </Stack.Navigator>
-      <SafeAreaView />
+      <SafeAreaView style={{ flex: 1, paddingTop: insets.top }}>
+        <StatusBar />
+        <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName='BottomTabsNavigator'>
+          <Stack.Screen
+            name='BottomTabsNavigator'
+            component={BottomTabsNavigator}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name='CreatePostScreen'
+            component={CreatePostScreen}
+            options={{
+              headerShown: false
+            }}
+          />
+        </Stack.Navigator>
+      </SafeAreaView>
     </>
   )
 }

@@ -1,17 +1,19 @@
 import React from 'react'
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
 import Ionicons from '@expo/vector-icons/Ionicons'
+import { BottomTabBarProps } from '@react-navigation/bottom-tabs'
 
-import { MainBottomTabs } from 'app/types/INavigation'
-import { useAppDispatch } from 'app/store/hooks'
+import { TBottomTabsNav } from 'app/types/INavigation'
 
-export default function CustomBottomTabs({ state, descriptors, navigation }: Props) {
-  function selectTabIcon(routeName: keyof MainBottomTabs | string, isFocused: boolean) {
+export default function CustomBottomTabs(props: BottomTabBarProps) {
+  const { state, descriptors, navigation } = props
+
+  function selectTabIcon(routeName: keyof TBottomTabsNav | string, isFocused: boolean) {
     switch (routeName) {
       case 'PostsListScreen':
-        return <Ionicons name='md-checkmark-circle' size={32} color='green' />
+        return <Ionicons name='image' size={32} color={isFocused ? 'green' : 'gray'} />
       case 'ProfileScreen':
-        return <Ionicons name='airplane-sharp' size={32} color='green' />
+        return <Ionicons name='person' size={32} color={isFocused ? 'green' : 'gray'} />
     }
     return <></>
   }
@@ -26,7 +28,7 @@ export default function CustomBottomTabs({ state, descriptors, navigation }: Pro
 
         const label =
           options.tabBarLabel !== undefined
-            ? options.tabBarLabel
+            ? (options.tabBarLabel as string)
             : options.title !== undefined
             ? options.title
             : route.name
@@ -39,7 +41,7 @@ export default function CustomBottomTabs({ state, descriptors, navigation }: Pro
           })
 
           if (!isFocused && !event.defaultPrevented) {
-            navigation.navigate({ name: route.name, merge: true })
+            navigation.navigate({ name: route.name, merge: true, params: {} })
           }
         }
 
@@ -85,7 +87,8 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   tabBarText: {
-    fontSize: 14
+    fontSize: 14,
+    paddingBottom: 5
   },
   focusedText: {
     color: '#673ab7' // Styles when the tab is focused

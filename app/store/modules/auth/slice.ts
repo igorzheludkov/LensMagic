@@ -24,8 +24,9 @@ export const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    updateUserState: (state, action) => {
+    updateUserState: (state, action: PayloadAction<User>) => {
       state.user = action.payload
+      state.isAuthorized = Boolean(action.payload.uid)
     }
   },
   extraReducers: (builder) => {

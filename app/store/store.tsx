@@ -9,7 +9,7 @@ import { persistCombineReducers, persistStore } from 'redux-persist'
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
-  whitelist: []
+  whitelist: ['']
   // blacklist: [apiSlice.reducerPath, userSliceApi.reducerPath]
 }
 
