@@ -6,7 +6,7 @@ import {
 } from 'app/store/modules/api/posts/postsApi'
 import { TRootStack } from 'app/types/INavigation'
 import { IPost } from 'app/types/IPost'
-import { View, Text, StyleSheet, Image, ScrollView } from 'react-native'
+import { View, Text, StyleSheet, Image, ScrollView, Keyboard } from 'react-native'
 import { Button, FAB, TextInput } from 'react-native-paper'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { useEffect, useState } from 'react'
@@ -26,16 +26,26 @@ export default function SinglePostScreen(props: IProps) {
 
   useEffect(() => {
     setComment({ ...commentState, createdAt: new Date().toString() })
+    Keyboard.dismiss()
   }, [addCommentResult.isSuccess])
 
   return (
     <>
       <ScrollView style={s.wrapper}>
         <Image source={{ uri: post?.image }} style={s.image} />
+        <View style={s.commentContainer}>
+          {post?.comments?.map((comment, index) => (
+            <View key={index}>
+              <Text>{comment.message}</Text>
+              <Text>{comment.createdAt}</Text>
+            </View>
+          ))}
+        </View>
       </ScrollView>
-      <View style={s.commentBlock}>
+      <View style={s.addCommentBlock}>
         <TextInput
           value={comment.message}
+          placeholder='Add comment'
           onChangeText={(text) => setComment((prev) => ({ ...prev, message: text }))}
           style={s.textInput}
         />
@@ -52,13 +62,17 @@ const s = StyleSheet.create({
     height: 200,
     width: '100%'
   },
-  commentBlock: {
+  addCommentBlock: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     position: 'absolute',
     bottom: 0,
-    width: '100%'
+    width: '100%',
+    backgroundColor: 'white'
+  },
+  commentContainer: {
+    backgroundColor: 'blue'
   },
   textInput: {
     flex: 1
