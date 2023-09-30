@@ -20,9 +20,8 @@ const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: false
-    })
+    }).concat(apiSlice.middleware)
   // .prepend(listenerMiddleware.middleware)
-  // .concat(apiSlice.middleware)
   // .concat(userSliceApi.middleware)
 })
 

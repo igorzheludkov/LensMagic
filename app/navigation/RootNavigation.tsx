@@ -41,7 +41,7 @@ export default function RootNavigation() {
             name='CreatePostScreen'
             component={CreatePostScreen}
             options={{
-              headerShown: false
+              headerShown: true
             }}
           />
         </Stack.Navigator>
