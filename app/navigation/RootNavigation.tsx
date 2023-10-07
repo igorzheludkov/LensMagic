@@ -31,40 +31,42 @@ export default function RootNavigation() {
 
   return (
     <>
-      <SafeAreaView style={{ flex: 1, paddingTop: insets.top }}>
-        <StatusBar />
-        <Stack.Navigator
-          screenOptions={{ headerShown: false }}
-          initialRouteName="BottomTabsNavigator"
-        >
-          <Stack.Screen
-            name="BottomTabsNavigator"
-            component={BottomTabsNavigator}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="AuthStack"
-            component={AuthStack}
-            options={{
-              headerShown: false,
-            }}
-          />
-          <Stack.Screen
-            name="CreatePostScreen"
-            component={CreatePostScreen}
-            options={{
-              headerShown: true,
-            }}
-          />
-          <Stack.Screen
-            name="SinglePostScreen"
-            component={SinglePostScreen}
-            options={{
-              headerShown: true,
-            }}
-          />
-        </Stack.Navigator>
-      </SafeAreaView>
+      <StatusBar
+        barStyle={'light-content'}
+        backgroundColor={'transparent'}
+        translucent={true}
+      />
+      <Stack.Navigator
+        screenOptions={{ headerShown: false }}
+        initialRouteName="BottomTabsNavigator"
+      >
+        <Stack.Screen
+          name="BottomTabsNavigator"
+          component={BottomTabsNavigator}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="AuthStack"
+          component={AuthStack}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="CreatePostScreen"
+          component={CreatePostScreen}
+          options={{
+            headerShown: true,
+          }}
+        />
+        <Stack.Screen
+          name="SinglePostScreen"
+          component={SinglePostScreen}
+          options={{
+            headerShown: true,
+          }}
+        />
+      </Stack.Navigator>
     </>
   );
 }

@@ -2,8 +2,10 @@ import React from 'react';
 import { SafeAreaView } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { TAuthStack } from 'app/types/INavigation';
-import RegistrationScreen from 'app/screens/RegistrationScreen';
-import LoginScreen from 'app/screens/LoginScreen';
+import RegistrationScreen from 'app/screens/AuthStack/RegistrationScreen';
+import LoginScreen from 'app/screens/AuthStack/LoginScreen';
+import { colors } from 'app/constants/colors';
+import { StatusBar } from 'expo-status-bar';
 
 const Stack = createNativeStackNavigator<TAuthStack>();
 
@@ -11,7 +13,11 @@ export default function AuthStack() {
   return (
     <>
       <Stack.Navigator
-        screenOptions={{ headerShown: true }}
+        screenOptions={{
+          headerShown: true,
+          headerTransparent: true,
+          headerTitleStyle: { color: colors.white },
+        }}
         initialRouteName="RegistrationScreen"
       >
         <Stack.Screen
@@ -20,7 +26,6 @@ export default function AuthStack() {
         />
         <Stack.Screen name="LoginScreen" component={LoginScreen} />
       </Stack.Navigator>
-      <SafeAreaView />
     </>
   );
 }

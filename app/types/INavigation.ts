@@ -3,7 +3,7 @@ import { NavigationProp } from '@react-navigation/native';
 export type Navigation = NavigationProp<TRootStack>;
 
 export type TRootStack = {
-  BottomTabsNavigator: TBottomTabsNav;
+  BottomTabsNavigator: { screen: keyof TBottomTabsNav };
   CreatePostScreen: undefined;
   AuthStack: { screen: keyof TAuthStack };
   SinglePostScreen: { postId: string };
