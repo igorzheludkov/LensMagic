@@ -1,51 +1,51 @@
-import { initialPostState } from 'app/screens/CreatePostScreen/state'
-import { IPost } from 'app/types/IPost'
-import { useEffect, useRef, useState } from 'react'
-import { View, Text, StyleSheet } from 'react-native'
-import { Button, TextInput } from 'react-native-paper'
-import useGetLocation from 'app/hooks/useGetLocation'
-import { Camera } from 'expo-camera'
-import { NavigationProp, useNavigation } from '@react-navigation/native'
-import { TRootStack } from 'app/types/INavigation'
-import { useAddPostMutation } from 'app/store/modules/api/posts/postsApi'
-
-type Navigation = NavigationProp<TRootStack>
+import { initialPostState } from 'app/screens/CreatePostScreen/state';
+import { IPost } from 'app/types/IPost';
+import { useEffect, useRef, useState } from 'react';
+import { View, Text, StyleSheet } from 'react-native';
+import { Button, TextInput } from 'react-native-paper';
+import useGetLocation from 'app/hooks/useGetLocation';
+import { Camera } from 'expo-camera';
+import { useNavigation } from '@react-navigation/native';
+import { useAddPostMutation } from 'app/store/modules/api/posts/postsApi';
+import { Navigation } from 'app/types/INavigation';
 
 export default function CreatePostScreen() {
-  const { goBack } = useNavigation<Navigation>()
-  const [addPost, result] = useAddPostMutation()
+  const { goBack } = useNavigation<Navigation>();
+  const [addPost, result] = useAddPostMutation();
 
-  const cameraRef = useRef<Camera>(null)
-  const [permission, requestPermission] = Camera.useCameraPermissions()
-  const [form, setForm] = useState<IPost>(initialPostState)
+  const cameraRef = useRef<Camera>(null);
+  const [permission, requestPermission] = Camera.useCameraPermissions();
+  const [form, setForm] = useState<IPost>(initialPostState);
 
-  const geo = useGetLocation()
-
-  useEffect(() => {
-    requestPermission()
-  }, [])
+  const geo = useGetLocation();
 
   useEffect(() => {
-    result.isSuccess && goBack()
-  }, [result.isSuccess])
+    requestPermission();
+  }, []);
 
   useEffect(() => {
-    geo.isSuccess && setForm((prev) => ({ ...prev, mapLocation: geo.location }))
-  }, [geo.isSuccess])
+    result.isSuccess && goBack();
+  }, [result.isSuccess]);
+
+  useEffect(() => {
+    geo.isSuccess && setForm(prev => ({ ...prev, mapLocation: geo.location }));
+  }, [geo.isSuccess]);
 
   function submitForm() {
-    addPost(form)
+    addPost(form);
   }
 
   function onChangeForm(text: string, field: keyof IPost) {
-    setForm({ ...form, [field]: text })
+    setForm({ ...form, [field]: text });
   }
 
   function takePhoto() {
-    cameraRef.current?.takePictureAsync().then((photo) => setForm((prev) => ({ ...prev, image: photo.uri })))
+    cameraRef.current
+      ?.takePictureAsync()
+      .then(photo => setForm(prev => ({ ...prev, image: photo.uri })));
   }
 
-  if (!permission?.granted) return <></>
+  if (!permission?.granted) return <></>;
 
   return (
     <View>
@@ -56,21 +56,27 @@ export default function CreatePostScreen() {
           </Button>
         </View>
       </Camera>
-      <TextInput value={form.title} onChangeText={(text) => onChangeForm(text, 'title')} />
-      <TextInput value={form.place} onChangeText={(text) => onChangeForm(text, 'place')} />
+      <TextInput
+        value={form.title}
+        onChangeText={text => onChangeForm(text, 'title')}
+      />
+      <TextInput
+        value={form.place}
+        onChangeText={text => onChangeForm(text, 'place')}
+      />
       <Button onPress={submitForm}>Submit</Button>
       {result.isLoading && <Text>Loading ....</Text>}
     </View>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
   wrapper: {
-    flex: 1
+    flex: 1,
   },
   camera: {
     height: 200,
-    justifyContent: 'flex-end'
+    justifyContent: 'flex-end',
   },
 
   buttonContainer: {},
@@ -79,6 +85,6 @@ const styles = StyleSheet.create({
     height: 50,
     borderColor: 'white',
     borderWidth: 2,
-    borderRadius: 50
-  }
-})
+    borderRadius: 50,
+  },
+});

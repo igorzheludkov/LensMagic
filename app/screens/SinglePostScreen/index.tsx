@@ -1,33 +1,36 @@
-import { NavigationProp, useNavigation } from '@react-navigation/native'
+import { useNavigation } from '@react-navigation/native';
 import {
   useAddPostCommentMutation,
-  useGetPostsQuery,
-  useGetSinglePostQuery
-} from 'app/store/modules/api/posts/postsApi'
-import { TRootStack } from 'app/types/INavigation'
-import { IPost } from 'app/types/IPost'
-import { View, Text, StyleSheet, Image, ScrollView, Keyboard } from 'react-native'
-import { Button, FAB, TextInput } from 'react-native-paper'
-import { NativeStackScreenProps } from '@react-navigation/native-stack'
-import { useEffect, useState } from 'react'
-import { commentState } from 'app/screens/SinglePostScreen/state'
+  useGetSinglePostQuery,
+} from 'app/store/modules/api/posts/postsApi';
+import { Navigation, TRootStack } from 'app/types/INavigation';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  ScrollView,
+  Keyboard,
+} from 'react-native';
+import { Button, TextInput } from 'react-native-paper';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { useEffect, useState } from 'react';
+import { commentState } from 'app/screens/SinglePostScreen/state';
 
-type Navigation = NavigationProp<TRootStack>
-
-type IProps = NativeStackScreenProps<TRootStack, 'SinglePostScreen'>
+type IProps = NativeStackScreenProps<TRootStack, 'SinglePostScreen'>;
 
 export default function SinglePostScreen(props: IProps) {
-  const postId = props.route.params.postId
-  const { navigate } = useNavigation<Navigation>()
-  const { data: post } = useGetSinglePostQuery(postId)
-  const [addComment, addCommentResult] = useAddPostCommentMutation()
+  const postId = props.route.params.postId;
+  const { navigate } = useNavigation<Navigation>();
+  const { data: post } = useGetSinglePostQuery(postId);
+  const [addComment, addCommentResult] = useAddPostCommentMutation();
 
-  const [comment, setComment] = useState(commentState)
+  const [comment, setComment] = useState(commentState);
 
   useEffect(() => {
-    setComment({ ...commentState, createdAt: new Date().toString() })
-    Keyboard.dismiss()
-  }, [addCommentResult.isSuccess])
+    setComment({ ...commentState, createdAt: new Date().toString() });
+    Keyboard.dismiss();
+  }, [addCommentResult.isSuccess]);
 
   return (
     <>
@@ -45,14 +48,16 @@ export default function SinglePostScreen(props: IProps) {
       <View style={s.addCommentBlock}>
         <TextInput
           value={comment.message}
-          placeholder='Add comment'
-          onChangeText={(text) => setComment((prev) => ({ ...prev, message: text }))}
+          placeholder="Add comment"
+          onChangeText={text =>
+            setComment(prev => ({ ...prev, message: text }))
+          }
           style={s.textInput}
         />
         <Button onPress={() => addComment({ postId, comment })}>Add</Button>
       </View>
     </>
-  )
+  );
 }
 
 const s = StyleSheet.create({
@@ -60,7 +65,7 @@ const s = StyleSheet.create({
   imageCont: {},
   image: {
     height: 200,
-    width: '100%'
+    width: '100%',
   },
   addCommentBlock: {
     flexDirection: 'row',
@@ -69,15 +74,15 @@ const s = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     width: '100%',
-    backgroundColor: 'white'
+    backgroundColor: 'white',
   },
   commentContainer: {
-    backgroundColor: 'blue'
+    backgroundColor: 'blue',
   },
   textInput: {
-    flex: 1
+    flex: 1,
   },
   addButton: {
-    backgroundColor: 'yellow'
-  }
-})
+    backgroundColor: 'yellow',
+  },
+});

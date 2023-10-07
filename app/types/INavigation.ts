@@ -1,17 +1,21 @@
+import { NavigationProp } from '@react-navigation/native';
+
+export type Navigation = NavigationProp<TRootStack>;
+
 export type TRootStack = {
-  BottomTabsNavigator: TBottomTabsNav
-  CreatePostScreen: undefined
-  LoginScreen: undefined
-  RegistrationScreen: undefined
-  SinglePostScreen: { postId: string }
-}
+  BottomTabsNavigator: TBottomTabsNav;
+  CreatePostScreen: undefined;
+  AuthStack: { screen: keyof TAuthStack };
+  SinglePostScreen: { postId: string };
+};
 
 export type TAuthStack = {
-  LoginScreen: undefined
-  RegistrationScreen: undefined
-}
+  LoginScreen: undefined;
+  RegistrationScreen: undefined;
+};
 
 export type TBottomTabsNav = {
-  PostsListScreen: undefined
-  ProfileScreen: undefined
-}
+  PostsListScreen: undefined;
+  CreatePostButton: undefined;
+  ProfileScreen: undefined;
+};
