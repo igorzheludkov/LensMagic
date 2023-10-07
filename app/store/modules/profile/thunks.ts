@@ -10,6 +10,7 @@ export const getUserProfile = createAsyncThunk(
   async (id: string, { rejectWithValue }) => {
     try {
       const profile = await getProfile(id);
+      console.log('~~~~~~~~~~~~~~ profileThunk', profile);
       return profile;
     } catch (error: any) {
       return rejectWithValue(error);
@@ -18,7 +19,8 @@ export const getUserProfile = createAsyncThunk(
 );
 export const addUpdateUserProfile = createAsyncThunk(
   'profile/addUpdateUserProfile',
-  async (data: IUser, { rejectWithValue }) => {
+  async (data: IUser, { rejectWithValue, getState, dispatch }) => {
+    const state = getState();
     try {
       if (data.avatar) {
         const avatarUrl = await uploadImage(
@@ -31,12 +33,17 @@ export const addUpdateUserProfile = createAsyncThunk(
             ...data,
             avatar: avatarUrl.result,
           });
+          dispatch(getUserProfile(data.id));
           return result;
         }
       }
       const response = await addUpdateProfile(data);
-      if (response.status) getUserProfile(data.id);
-      return response;
+      if (response.status) {
+        dispatch(getUserProfile(data.id));
+        return response;
+      } else {
+        return rejectWithValue(response);
+      }
     } catch (error: any) {
       return rejectWithValue(error);
     }
