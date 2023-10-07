@@ -1,4 +1,5 @@
 export interface IUserCreds {
-  email: string
-  password: string
+  name: string;
+  email: string;
+  password: string;
 }

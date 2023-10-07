@@ -14,6 +14,7 @@ export default function LoginScreen() {
   const { handleSubmit, isLoading } = useAuthLogicHook();
 
   const [creds, setCreds] = useState<IUserCreds>({
+    name: 'test',
     email: 'test@gmail.com',
     password: '1234567890',
   });

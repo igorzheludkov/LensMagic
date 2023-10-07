@@ -32,7 +32,7 @@ export default function RootNavigation() {
   return (
     <>
       <StatusBar
-        barStyle={'light-content'}
+        barStyle={'dark-content'}
         backgroundColor={'transparent'}
         translucent={true}
       />
