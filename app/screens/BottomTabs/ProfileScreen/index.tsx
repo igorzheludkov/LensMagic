@@ -25,10 +25,6 @@ export default function ProfileScreen() {
   }
 
   useEffect(() => {
-    user?.uid && dispatch(getUserProfile(user.uid));
-  }, [user?.uid]);
-
-  useEffect(() => {
     if (profileState.isSuccess) {
       profileState.profile && setProfileForm(profileState.profile);
     }

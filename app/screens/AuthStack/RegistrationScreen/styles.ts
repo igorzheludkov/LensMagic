@@ -8,6 +8,23 @@ export const s = StyleSheet.create({
     borderTopLeftRadius: 15,
     borderTopRightRadius: 15,
   },
+  container: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  leftContainer: {
+    paddingRight: 10,
+    // borderWidth: 1,
+  },
+  rightContainer: {
+    flex: 1,
+    // borderWidth: 1,
+  },
+  avatar: {
+    width: 120,
+    height: 120,
+    borderRadius: 15,
+  },
   form: {
     paddingHorizontal: 10,
   },

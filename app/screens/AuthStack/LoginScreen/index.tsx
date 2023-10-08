@@ -11,11 +11,14 @@ import { IUserCreds } from 'app/types/IAuth';
 export default function LoginScreen() {
   const { navigate } = useNavigation<Navigation>();
 
-  const { handleSubmit, isLoading } = useAuthLogicHook();
-
   const [creds, setCreds] = useState<IUserCreds>({
     email: 'test@gmail.com',
     password: '1234567890',
+  });
+
+  const { handleSubmit, isLoading } = useAuthLogicHook({
+    creds,
+    screen: 'LoginScreen',
   });
 
   return (
@@ -35,7 +38,7 @@ export default function LoginScreen() {
         />
         <Button
           style={s.button}
-          onPress={() => handleSubmit(creds, 'LoginScreen')}
+          onPress={handleSubmit}
           mode="contained"
           loading={isLoading}
         >

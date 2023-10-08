@@ -12,6 +12,7 @@ import { useAppDispatch } from 'app/store/hooks';
 import { authActions } from 'app/store/modules/auth/slice';
 import SinglePostScreen from 'app/screens/SinglePostScreen';
 import AuthStack from 'app/navigation/AuthStack';
+import { getUserProfile } from 'app/store/modules/profile/thunks';
 
 const Stack = createNativeStackNavigator<TRootStack>();
 
@@ -23,6 +24,7 @@ export default function RootNavigation() {
     onAuthStateChanged(auth, user => {
       if (user) {
         dispatch(authActions.updateUserState(user));
+        dispatch(getUserProfile(user.uid));
       } else {
         console.log('~~~~~~~~~~~~~~ loggedOut');
       }
